@@ -2,10 +2,13 @@
   "name": "pazireshino",
   "version": "1.0.0",
   "description": "backend for pazireshino webapp",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.22.1"
+  }
 }
