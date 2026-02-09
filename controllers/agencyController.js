@@ -14,6 +14,16 @@ exports.checkID = (req, res, next, val) => {
   next();
 };
 
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.email) {
+    return res.status(400).json({
+      status: "error",
+      message: "Name and email are required",
+    });
+  }
+  next();
+};
+
 exports.getAllAgencies = (req, res) => {
   console.log(req.requestTime);
   res.status(200).json({
@@ -44,8 +54,8 @@ exports.createAgency = (req, res) => {
   const newAgency = Object.assign({ id: newId }, req.body);
   agencies.push(newAgency);
 
-  fs.writeFileSync(
-    `${__dirname}/dev-data/data/agencies.json`,
+  fs.writeFile(
+    `${__dirname}/../dev-data/data/agencies.json`,
     JSON.stringify(agencies),
     (err) => {
       if (err) {
