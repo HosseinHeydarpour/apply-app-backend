@@ -2,7 +2,7 @@ const fs = require("fs");
 
 // User Routes
 const users = JSON.parse(
-  fs.readFileSync(`${__dirname}/dev-data/data/users.json`),
+  fs.readFileSync(`${__dirname}/../dev-data/data/users.json`),
 );
 
 exports.getAllUsers = (req, res) => {

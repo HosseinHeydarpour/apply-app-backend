@@ -1,7 +1,7 @@
 const fs = require("fs");
 
 const agencies = JSON.parse(
-  fs.readFileSync(`${__dirname}/dev-data/data/agencies.json`),
+  fs.readFileSync(`${__dirname}/../dev-data/data/agencies.json`),
 );
 
 exports.getAllAgencies = (req, res) => {
