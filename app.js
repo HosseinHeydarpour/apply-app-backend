@@ -1,10 +1,10 @@
 const express = require("express");
-const app = express();
 
+const morgan = require("morgan");
 const agencyRoute = require("./routes/agencyRoutes");
 const userRoute = require("./routes/userRoutes");
 
-const morgan = require("morgan");
+const app = express();
 
 console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV === "development") {
