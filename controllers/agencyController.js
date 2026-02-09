@@ -4,6 +4,16 @@ const agencies = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/agencies.json`),
 );
 
+exports.checkID = (req, res, next, val) => {
+  if (val > agencies.length) {
+    return res.status(404).json({
+      status: "error",
+      message: "Invalid ID",
+    });
+  }
+  next();
+};
+
 exports.getAllAgencies = (req, res) => {
   console.log(req.requestTime);
   res.status(200).json({
@@ -19,12 +29,7 @@ exports.getAllAgencies = (req, res) => {
 exports.getAgency = (req, res) => {
   const id = req.params.id * 1;
   const agency = agencies.find((agency) => agency.id === id);
-  if (!agency) {
-    return res.status(404).json({
-      status: "error",
-      message: "Agency not found",
-    });
-  }
+
   res.status(200).json({
     status: "success",
     requestTime: req.requestTime,
@@ -61,12 +66,7 @@ exports.createAgency = (req, res) => {
 
 exports.updateAgency = (req, res) => {
   const id = req.params.id * 1;
-  if (id > agencies.length) {
-    return res.status(404).json({
-      status: "error",
-      message: "Agency not found",
-    });
-  }
+
   // Update agency logic here
   res.status(200).json({
     status: "success",
@@ -78,12 +78,7 @@ exports.updateAgency = (req, res) => {
 
 exports.deleteAgency = (req, res) => {
   const id = req.params.id * 1;
-  if (id > agencies.length) {
-    return res.status(404).json({
-      status: "error",
-      message: "Agency not found",
-    });
-  }
+
   // Delete agency logic here
   res.status(204).json({
     status: "success",

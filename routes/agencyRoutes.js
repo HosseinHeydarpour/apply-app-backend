@@ -4,6 +4,8 @@ const router = express.Router();
 
 const agencyController = require("../controllers/agencyController");
 
+router.param("id", agencyController.checkID);
+
 router
   .route("/")
   .get(agencyController.getAllAgencies)
