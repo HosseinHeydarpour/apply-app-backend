@@ -9,7 +9,7 @@ router.param("id", agencyController.checkID);
 router
   .route("/")
   .get(agencyController.getAllAgencies)
-  .post(agencyController.createAgency);
+  .post(agencyController.checkBody, agencyController.createAgency);
 router
   .route("/:id")
   .get(agencyController.getAgency)
