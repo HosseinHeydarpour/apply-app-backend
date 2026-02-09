@@ -152,22 +152,24 @@ const deleteUser = (req, res) => {
 
 // Agency routes
 
-app.route("/api/v1/agencies").get(getAllAgencies).post(createAgency);
+const agencyRoute = express.Router();
 
-app
-  .route("/api/v1/agencies/:id")
+app.use("/api/v1/agencies", agencyRoute);
+
+agencyRoute.route("/").get(getAllAgencies).post(createAgency);
+agencyRoute
+  .route("/:id")
   .get(getAgency)
   .patch(updateAgency)
   .delete(deleteAgency);
 
 // User routes
+const userRoute = express.Router();
 
-app.route("/api/v1/users").get(getAllUsers).post(createUser);
-app
-  .route("/api/v1/users/:id")
-  .get(getUser)
-  .patch(updateUser)
-  .delete(deleteUser);
+app.use("/api/v1/users", userRoute);
+
+userRoute.route("/").get(getAllUsers).post(createUser);
+userRoute.route("/:id").get(getUser).patch(updateUser).delete(deleteUser);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
