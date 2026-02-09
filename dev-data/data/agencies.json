@@ -1,0 +1,29 @@
+[
+  {
+    "id": 0,
+    "name": "موسسه مهاجرتی افق دانش",
+    "logoUrl": "https://example.com/images/logo-ofogh.png",
+    "description": "با بیش از ۱۰ سال سابقه در اخذ پذیرش تحصیلی از دانشگاه‌های معتبر کانادا و آلمان. ارائه خدمات مشاوره و ویزا.",
+    "contactInfo": "تهران، خیابان ولیعصر، پلاک ۱. تلفن: ۰۲۱-۸۸۸۸۸۸۸۸ | ایمیل: info@ofoghdanesh.com",
+    "supportedUniversities": [
+      "65bf7a1b9c9d4b0012345678",
+      "65bf7a1b9c9d4b0012345679"
+    ]
+  },
+  {
+    "id": 1,
+    "name": "آکادمی اپلای پلاس",
+    "logoUrl": "https://example.com/images/apply-plus.jpg",
+    "description": "تخصصی‌ترین مرکز اعزام دانشجو به ایتالیا و فرانسه همراه با بورسیه استانی.",
+    "contactInfo": "شیراز، بلوار ارم. تماس: ۰۹۱۲۳۴۵۶۷۸۹",
+    "supportedUniversities": ["65bf7a1b9c9d4b0012345680"]
+  },
+  {
+    "id": 2,
+    "name": "موسسه رهپویان علم",
+    "logoUrl": null,
+    "description": "مشاوره رایگان برای تحصیل در مقاطع کارشناسی ارشد و دکتری در آمریکا.",
+    "contactInfo": "ایمیل: support@rahpouyan.ir",
+    "supportedUniversities": []
+  }
+]
