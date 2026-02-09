@@ -1,9 +1,13 @@
 const express = require("express");
 const app = express();
 const fs = require("fs");
+const morgan = require("morgan");
 
 // Middleware
 app.use(express.json());
+
+// OPTIONS: "dev" | "combined" | "short" | "tiny"
+app.use(morgan("dev"));
 
 app.use((req, res, next) => {
   console.log("Hello From Middleware");
@@ -106,12 +110,49 @@ const deleteAgency = (req, res) => {
   });
 };
 
-app.route("/api/v1/agencies").get(getAllAgencies).post(createAgency);
+// User Routes
+const users = JSON.parse(
+  fs.readFileSync(`${__dirname}/dev-data/data/users.json`),
+);
 
-app.use((req, res, next) => {
-  console.log("Hello From Middleware before getAgency");
-  next();
-});
+const getAllUsers = (req, res) => {
+  res.status(500).json({
+    status: "error",
+    message: "Route not implemented yet",
+  });
+};
+
+const getUser = (req, res) => {
+  res.status(500).json({
+    status: "error",
+    message: "Route not implemented yet",
+  });
+};
+
+const createUser = (req, res) => {
+  res.status(500).json({
+    status: "error",
+    message: "Route not implemented yet",
+  });
+};
+
+const updateUser = (req, res) => {
+  res.status(500).json({
+    status: "error",
+    message: "Route not implemented yet",
+  });
+};
+
+const deleteUser = (req, res) => {
+  res.status(500).json({
+    status: "error",
+    message: "Route not implemented yet",
+  });
+};
+
+// Agency routes
+
+app.route("/api/v1/agencies").get(getAllAgencies).post(createAgency);
 
 app
   .route("/api/v1/agencies/:id")
@@ -119,10 +160,14 @@ app
   .patch(updateAgency)
   .delete(deleteAgency);
 
-app.use((req, res, next) => {
-  console.log("Hello From Middleware after getAgency");
-  next();
-});
+// User routes
+
+app.route("/api/v1/users").get(getAllUsers).post(createUser);
+app
+  .route("/api/v1/users/:id")
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

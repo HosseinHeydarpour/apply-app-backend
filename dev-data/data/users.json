@@ -1,0 +1,33 @@
+[
+  {
+    "firstName": "رضا",
+    "lastName": "کریمی",
+    "phone": "09121234567",
+    "password": "$2b$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPG3ql1yO",
+    "documents": [
+      {
+        "docType": "passport",
+        "fileUrl": "https://s3.amazonaws.com/bucket/reza-passport.jpg",
+        "uploadedAt": "2023-10-05T14:48:00.000Z"
+      },
+      {
+        "docType": "other",
+        "fileUrl": "https://s3.amazonaws.com/bucket/reza-recommendation.pdf",
+        "uploadedAt": "2023-10-06T10:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "firstName": "مریم",
+    "lastName": "امینی",
+    "phone": "09369876543",
+    "password": "$2b$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPG3ql1yO",
+    "documents": [
+      {
+        "docType": "transcript",
+        "fileUrl": "https://s3.amazonaws.com/bucket/maryam-grades.pdf",
+        "uploadedAt": "2023-11-20T09:30:00.000Z"
+      }
+    ]
+  }
+]
