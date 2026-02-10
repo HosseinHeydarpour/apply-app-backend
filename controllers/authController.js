@@ -5,23 +5,20 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
 exports.signup = catchAsync(async (req, res, next) => {
-  const { firstName, lastName, email, phone, password, passwordConfirm } =
-    req.body;
+  // 1. Create the user object with only the allowed fields
+  // (This prevents users from manually setting roles like 'admin')
+  const newUser = await User.create({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    phone: req.body.phone,
+    password: req.body.password,
+    passwordConfirm: req.body.passwordConfirm,
+  });
 
-  if (password !== passwordConfirm) {
-    return next(new AppError("Passwords do not match", 400));
-  }
-
-  const user = {
-    firstName: firstName,
-    lastName: lastName,
-    email: email,
-    phone: phone,
-    password: password,
-    passwordConfirm: passwordConfirm,
-  };
-
-  const newUser = await User.create(user);
+  // 2. Send response
+  // Ideally, remove the password from the response output
+  newUser.password = undefined;
 
   res.status(201).json({
     status: "success",
