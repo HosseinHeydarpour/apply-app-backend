@@ -13,6 +13,7 @@ const agencySchema = new mongoose.Schema({
       ref: "University",
     },
   ],
+  createdAt: { type: Date, default: Date.now, select: false },
 });
 
 const Agency = mongoose.model("Agency", agencySchema);

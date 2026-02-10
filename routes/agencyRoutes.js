@@ -5,6 +5,10 @@ const router = express.Router();
 const agencyController = require("../controllers/agencyController");
 
 router
+  .route("/top-agencies")
+  .get(agencyController.aliasTopAgencies, agencyController.getAllAgencies);
+
+router
   .route("/")
   .get(agencyController.getAllAgencies)
   .post(agencyController.createAgency);
