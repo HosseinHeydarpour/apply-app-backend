@@ -1,6 +1,7 @@
 const Agency = require("../model/agencyModel");
 const APIFeatures = require("../utils/apiFeatures");
 const catchAsync = require("../utils/catchAsync");
+const AppError = require("../utils/appError");
 
 exports.aliasTopAgencies = (req, res, next) => {
   req.query.limit = "5";
@@ -26,6 +27,11 @@ exports.getAllAgencies = catchAsync(async (req, res) => {
 
 exports.getAgency = catchAsync(async (req, res) => {
   const agency = await Agency.findById(req.params.id);
+
+  if (!agency) {
+    return next(new AppError("Agency not found", 404));
+  }
+
   res.status(200).json({
     status: "success",
     data: {
@@ -49,6 +55,11 @@ exports.updateAgency = catchAsync(async (req, res) => {
     new: true,
     runValidators: true,
   });
+
+  if (!agency) {
+    return next(new AppError("Agency not found", 404));
+  }
+
   res.status(200).json({
     status: "success",
     data: {
@@ -58,9 +69,14 @@ exports.updateAgency = catchAsync(async (req, res) => {
 });
 
 exports.deleteAgency = catchAsync(async (req, res) => {
-  await Agency.findByIdAndDelete(req.params.id);
+  const agency = await Agency.findByIdAndDelete(req.params.id);
+
+  if (!agency) {
+    return next(new AppError("Agency not found", 404));
+  }
+
   res.status(204).json({
-    status: "Tour deleted successfully",
+    status: "success",
     data: null,
   });
 });
