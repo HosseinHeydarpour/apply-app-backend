@@ -7,7 +7,7 @@ const agencyController = require("../controllers/agencyController");
 router
   .route("/")
   .get(agencyController.getAllAgencies)
-  .post(agencyController.checkBody, agencyController.createAgency);
+  .post(agencyController.createAgency);
 router
   .route("/:id")
   .get(agencyController.getAgency)
