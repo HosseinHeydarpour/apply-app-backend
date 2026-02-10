@@ -34,6 +34,11 @@ agencySchema.pre("save", function (next) {
   next();
 });
 
+agencySchema.post(/^find/, function (docs, next) {
+  console.log(`Query took ${Date.now() - this._startTime} milliseconds`);
+  next();
+});
+
 const Agency = mongoose.model("Agency", agencySchema);
 
 module.exports = Agency;
