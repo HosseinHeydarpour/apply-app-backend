@@ -1,12 +1,39 @@
 const Agency = require("../model/agencyModel");
 
-exports.getAllAgencies = (req, res) => {
-  res.status(200).json({
-    status: "success",
-  });
+exports.getAllAgencies = async (req, res) => {
+  try {
+    const agencies = await Agency.find();
+    res.status(200).json({
+      status: "success",
+      results: agencies.length,
+      data: {
+        agencies,
+      },
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
 };
 
-exports.getAgency = (req, res) => {};
+exports.getAgency = async (req, res) => {
+  try {
+    const agency = await Agency.findById(req.params.id);
+    res.status(200).json({
+      status: "success",
+      data: {
+        agency,
+      },
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+};
 
 exports.createAgency = async (req, res) => {
   try {
@@ -26,6 +53,37 @@ exports.createAgency = async (req, res) => {
   }
 };
 
-exports.updateAgency = (req, res) => {};
+exports.updateAgency = async (req, res) => {
+  try {
+    const agency = await Agency.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json({
+      status: "success",
+      data: {
+        agency,
+      },
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+};
 
-exports.deleteAgency = (req, res) => {};
+exports.deleteAgency = async (req, res) => {
+  try {
+    await Agency.findByIdAndDelete(req.params.id);
+    res.status(204).json({
+      status: "Tour deleted successfully",
+      data: null,
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+};

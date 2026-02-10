@@ -9,8 +9,8 @@ const consultationSchema = new mongoose.Schema(
       required: true,
     },
 
-    subject: { type: String }, // موضوع مشاوره
-    description: { type: String }, // متن درخواست کاربر
+    subject: { type: String, trim: true }, // موضوع مشاوره
+    description: { type: String, trim: true }, // متن درخواست کاربر
 
     status: {
       type: String,

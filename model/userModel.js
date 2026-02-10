@@ -1,17 +1,18 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  phone: { type: String, required: true, unique: true }, // کلید اصلی برای لاگین
+  firstName: { type: String, required: true, trim: true },
+  lastName: { type: String, required: true, trim: true },
+  phone: { type: String, required: true, unique: true, trim: true }, // کلید اصلی برای لاگین
   password: { type: String, required: true }, // حتما هش شده ذخیره شود
+  profileImage: { type: String, trim: true }, // آدرس تصویر پروفایل
 
   // مدارک به صورت آرایه ذخیره می‌شوند تا قابلیت گسترش داشته باشد
   documents: [
     {
       docType: {
         type: String,
-        enum: ["passport", "transcript", "cv", "other"], // انواع مجاز
+        enum: ["passport", "scoreList", "cv", "other"], // انواع مجاز
         required: false,
       },
       fileUrl: { type: String, required: false }, // آدرس فایل آپلود شده

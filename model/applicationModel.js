@@ -21,7 +21,7 @@ const applicationSchema = new mongoose.Schema(
     },
 
     // توضیحات کاربر هنگام ثبت درخواست
-    userNote: { type: String },
+    userNote: { type: String, trim: true },
 
     // فیلد برای تاریخچه (History)
   },
