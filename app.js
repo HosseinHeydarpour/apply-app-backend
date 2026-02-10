@@ -28,4 +28,12 @@ app.use((req, res, next) => {
 app.use("/api/v1/agencies", agencyRoute);
 app.use("/api/v1/users", userRoute);
 
+// All other routes
+app.all("*", (req, res) => {
+  res.status(404).json({
+    status: "fail",
+    message: "Route not found",
+  });
+});
+
 module.exports = app;
