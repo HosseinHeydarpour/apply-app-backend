@@ -25,7 +25,7 @@ exports.getAllAgencies = catchAsync(async (req, res) => {
   });
 });
 
-exports.getAgency = catchAsync(async (req, res) => {
+exports.getAgency = catchAsync(async (req, res, next) => {
   const agency = await Agency.findById(req.params.id);
 
   if (!agency) {
@@ -50,7 +50,7 @@ exports.createAgency = catchAsync(async (req, res) => {
   });
 });
 
-exports.updateAgency = catchAsync(async (req, res) => {
+exports.updateAgency = catchAsync(async (req, res, next) => {
   const agency = await Agency.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -68,7 +68,7 @@ exports.updateAgency = catchAsync(async (req, res) => {
   });
 });
 
-exports.deleteAgency = catchAsync(async (req, res) => {
+exports.deleteAgency = catchAsync(async (req, res, next) => {
   const agency = await Agency.findByIdAndDelete(req.params.id);
 
   if (!agency) {
