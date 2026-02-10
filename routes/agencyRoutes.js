@@ -4,13 +4,15 @@ const router = express.Router();
 
 const agencyController = require("../controllers/agencyController");
 
+const authController = require("../controllers/authController");
+
 router
   .route("/top-agencies")
   .get(agencyController.aliasTopAgencies, agencyController.getAllAgencies);
 
 router
   .route("/")
-  .get(agencyController.getAllAgencies)
+  .get(authController.protect, agencyController.getAllAgencies)
   .post(agencyController.createAgency);
 router
   .route("/:id")
