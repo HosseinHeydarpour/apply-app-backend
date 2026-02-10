@@ -4,9 +4,19 @@ const validator = require("validator");
 
 const agencySchema = new mongoose.Schema(
   {
-    name: { type: String, required: true, trim: true },
+    name: {
+      type: String,
+      required: [true, "Name is required"],
+      trim: true,
+      maxlength: [50, "Name cannot be more than 50 characters"],
+      minlength: [2, "Name must be at least 2 characters"],
+    },
     logoUrl: { type: String, trim: true },
-    description: { type: String, trim: true },
+    description: {
+      type: String,
+      trim: true,
+      maxlength: [10000, "Description cannot be more than 10000 characters"],
+    },
     contactInfo: { type: String, trim: true }, // یا آبجکت شامل تلفن و ایمیل
     slug: { type: String, trim: true },
     // ارتباط با دانشگاه‌ها (این موسسه کدام دانشگاه‌ها را ساپورت می‌کند)

@@ -10,11 +10,18 @@ const consultationSchema = new mongoose.Schema(
     },
 
     subject: { type: String, trim: true }, // موضوع مشاوره
-    description: { type: String, trim: true }, // متن درخواست کاربر
+    description: {
+      type: String,
+      trim: true,
+      maxlength: [1000, "Description cannot be more than 1000 characters"],
+    }, // متن درخواست کاربر
 
     status: {
       type: String,
-      enum: ["pending", "scheduled", "done", "canceled"],
+      enum: {
+        values: ["pending", "scheduled", "done", "canceled"],
+        message: "Status must be one of: pending, scheduled, done, canceled",
+      },
       default: "pending",
     },
   },

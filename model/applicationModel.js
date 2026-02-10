@@ -16,12 +16,20 @@ const applicationSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["pending", "reviewing", "accepted", "rejected"],
+      enum: {
+        values: ["pending", "reviewing", "accepted", "rejected"],
+        message:
+          "Status must be one of: pending, reviewing, accepted, rejected",
+      },
       default: "pending",
     },
 
     // توضیحات کاربر هنگام ثبت درخواست
-    userNote: { type: String, trim: true },
+    userNote: {
+      type: String,
+      trim: true,
+      maxlength: [1000, "Note cannot be more than 1000 characters"],
+    },
 
     // فیلد برای تاریخچه (History)
   },
