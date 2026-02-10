@@ -1,17 +1,14 @@
+const jwt = require("jsonwebtoken");
 const User = require("../model/userModel");
 
 const catchAsync = require("../utils/catchAsync");
 
 const AppError = require("../utils/appError");
 
-const jwt = require("jsonwebtoken");
-const { use } = require("react");
-
-const signToken = (id) => {
+const signToken = (id) =>
   jwt.sign({ id: id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
-};
 
 exports.signup = catchAsync(async (req, res, next) => {
   // 1. Create the user object with only the allowed fields
@@ -56,5 +53,3 @@ exports.login = catchAsync(async (req, res, next) => {
     token,
   });
 });
-
-exports.login = catchAsync(async (req, res, next) => {});
