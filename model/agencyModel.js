@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const slugify = require("slugify");
+const validator = require("validator");
 
 const agencySchema = new mongoose.Schema(
   {
@@ -30,7 +32,7 @@ const agencySchema = new mongoose.Schema(
 
 // Generate slug from name before saving
 agencySchema.pre("save", function (next) {
-  this.slug = require("slugify")(this.name, { lower: true });
+  this.slug = slugify(this.name, { lower: true });
   next();
 });
 
