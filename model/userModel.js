@@ -33,7 +33,11 @@ const userSchema = new mongoose.Schema(
       trim: true,
       maxlength: [20, "Phone cannot be more than 20 characters"],
     }, // کلید اصلی برای لاگین
-    password: { type: String, required: [true, "Password is required"] }, // حتما هش شده ذخیره شود
+    password: {
+      type: String,
+      required: [true, "Password is required"],
+      select: false,
+    }, // حتما هش شده ذخیره شود
     passwordConfirm: {
       type: String,
       required: [true, "Please confirm your password"],
@@ -90,6 +94,13 @@ userSchema.pre("save", async function (next) {
 
   next();
 });
+
+userSchema.methods.correctPassword = async function (
+  candidatePassword,
+  userPassword,
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 const User = mongoose.model("User", userSchema);
 
