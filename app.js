@@ -17,6 +17,7 @@ app.use(cors({ origin: "http://localhost:4200" }));
 
 // Middleware
 app.use(express.json());
+app.use(express.static(`${__dirname}/public`));
 
 // OPTIONS: "dev" | "combined" | "short" | "tiny"
 app.use(morgan("dev"));
