@@ -167,3 +167,94 @@ exports.uploadDocument = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+// --- APPLICATION & CONSULTATION HANDLERS ---
+
+exports.applyToUniversity = catchAsync(async (req, res, next) => {
+  const { universityId } = req.body;
+
+  // 1. Check if ID is provided
+  if (!universityId) {
+    return next(new AppError("Please provide a university ID.", 400));
+  }
+
+  // 2. Fetch user to check for duplicates
+  const user = await User.findById(req.user.id);
+
+  // 3. Check if user already applied to this university
+  const existingApplication = user.applications.find(
+    (app) => app.university.toString() === universityId,
+  );
+
+  if (existingApplication) {
+    return next(
+      new AppError("You have already applied to this university.", 400),
+    );
+  }
+
+  // 4. Update User with new Application
+  // We use $push to add to the array
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      $push: {
+        applications: {
+          university: universityId,
+          status: "pending", // Default is pending, but being explicit is safe
+          appliedAt: Date.now(),
+        },
+      },
+    },
+    {
+      new: true,
+      runValidators: true,
+    },
+  ).populate("applications.university"); // Optional: Populate to send back full details
+
+  res.status(200).json({
+    status: "success",
+    message: "Application submitted successfully",
+    data: {
+      applications: updatedUser.applications,
+    },
+  });
+});
+
+exports.requestConsultation = catchAsync(async (req, res, next) => {
+  const { agencyId, scheduledAt } = req.body;
+
+  // 1. Check if Agency ID is provided
+  if (!agencyId) {
+    return next(new AppError("Please provide an Agency ID.", 400));
+  }
+
+  // 2. Update User with new Consultation
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      $push: {
+        consultations: {
+          consultant: agencyId, // matches your schema ref: 'Agency'
+          status: "pending",
+          scheduledAt: scheduledAt || Date.now(), // Use provided date or default to now
+        },
+      },
+    },
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
+
+  // 3. Get the newly added consultation (it will be the last one in the array)
+  const newConsultation =
+    updatedUser.consultations[updatedUser.consultations.length - 1];
+
+  res.status(200).json({
+    status: "success",
+    message: "Consultation requested successfully",
+    data: {
+      consultation: newConsultation,
+    },
+  });
+});

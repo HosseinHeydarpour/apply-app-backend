@@ -5,6 +5,7 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 
 const crypto = require("crypto");
+const { application } = require("express");
 
 const userSchema = new mongoose.Schema(
   {
@@ -76,6 +77,37 @@ const userSchema = new mongoose.Schema(
 
     passwordResetToken: String,
     passwordResetExpires: Date,
+
+    applications: [
+      {
+        university: { type: mongoose.Schema.Types.ObjectId, ref: "University" },
+        status: {
+          type: String,
+          enum: {
+            values: ["pending", "reviewing", "accepted", "rejected"],
+            message:
+              "Status must be one of: pending, reviewing, accepted, rejected",
+          },
+          default: "pending",
+        },
+        appliedAt: { type: Date, default: Date.now },
+      },
+    ],
+    consultations: [
+      {
+        consultant: { type: mongoose.Schema.Types.ObjectId, ref: "Agency" },
+        status: {
+          type: String,
+          enum: {
+            values: ["pending", "scheduled", "completed", "cancelled"],
+            message:
+              "Status must be one of: pending, scheduled, completed, cancelled",
+          },
+          default: "pending",
+        },
+        scheduledAt: { type: Date, default: Date.now },
+      },
+    ],
   },
   {
     toJSON: {

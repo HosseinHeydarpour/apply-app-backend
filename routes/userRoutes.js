@@ -33,6 +33,13 @@ router
     userController.uploadDocument,
   );
 
+router.post("/apply", authController.protect, userController.applyToUniversity);
+router.post(
+  "/consultation",
+  authController.protect,
+  userController.requestConsultation,
+);
+
 router.route("/").get(authController.protect, userController.getAllUsers);
 
 router.route("/:id").get(authController.protect, userController.getUser);
