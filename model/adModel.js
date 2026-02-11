@@ -6,7 +6,6 @@ const adSchema = new mongoose.Schema({
   targetUrl: { type: String, trim: true }, // لینکی که کاربر با کلیک به آن هدایت می‌شود
   isActive: { type: Boolean, default: true }, // برای فعال/غیرفعال کردن نمایش
   expirationDate: { type: Date }, // تاریخ انقضای تبلیغ
-  duration: { type: Number }, // مدت زمان نمایش تبلیغ به میلی‌ثانیه
 });
 
 const Ad = mongoose.model("Ad", adSchema);
