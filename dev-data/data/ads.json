@@ -1,0 +1,34 @@
+[
+  {
+    "title": "موسسه حامی مهاجر - لاتاری و تحصیلی",
+    "imageUrl": "mohajer.jpg",
+    "targetUrl": "https://hamimohajer.com",
+    "isActive": true,
+    "expirationDate": "2026-12-29T00:00:00.000Z",
+    "createdAt": "2026-02-10T09:00:00.000Z"
+  },
+  {
+    "title": "Go2TR - اعزام دانشجو به سراسر دنیا",
+    "imageUrl": "go2tr.jpg",
+    "targetUrl": "https://go2tr.com",
+    "isActive": true,
+    "expirationDate": "2027-03-20T23:59:59.000Z",
+    "createdAt": "2026-02-01T14:30:00.000Z"
+  },
+  {
+    "title": "لتس گو یونی (Lets Go Uni) - پذیرش تحصیلی کانادا",
+    "imageUrl": "canada-offer.jpg",
+    "targetUrl": "https://letsgouni.com",
+    "isActive": true,
+    "expirationDate": "2026-09-01T00:00:00.000Z",
+    "createdAt": "2026-02-11T08:15:00.000Z"
+  },
+  {
+    "title": "موسسه حقوقی ملک‌پور (MIE)",
+    "imageUrl": "mie.jpg",
+    "targetUrl": "https://malekpourmie.net",
+    "isActive": true,
+    "expirationDate": "2026-11-30T18:00:00.000Z",
+    "createdAt": "2026-01-15T11:45:00.000Z"
+  }
+]
