@@ -70,7 +70,6 @@ const userSchema = new mongoose.Schema(
         uploadedAt: { type: Date, default: Date.now },
       },
     ],
-    profilePicture: { type: String, trim: true, default: "" }, // آدرس تصویر پروفایل
 
     createdAt: { type: Date, default: Date.now, select: false },
 
