@@ -109,36 +109,52 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 exports.uploadDocumentMiddleware = upload.single("document");
 
 exports.uploadDocument = catchAsync(async (req, res, next) => {
-  // 1. Check if file exists
+  // A. Validation: Check if file exists
   if (!req.file) {
-    return next(new AppError("No file uploaded!", 400));
+    return next(new AppError("No file uploaded. Please select a file.", 400));
   }
 
-  // 2. Get the docType from the body (sent by frontend)
-  // We default to 'passport' if not provided, but frontend should send it.
-  const docType = req.body.docType || "passport";
+  // B. Validation: Check if docType is valid
+  // (We check this manually here to give a better error message than Mongoose)
+  const allowedTypes = ["passport", "scoreList", "cv", "other"];
+  const { docType } = req.body;
 
-  // 3. Create the new document object based on your Schema
+  if (!docType || !allowedTypes.includes(docType)) {
+    return next(
+      new AppError(
+        `Invalid document type. Must be one of: ${allowedTypes.join(", ")}`,
+        400,
+      ),
+    );
+  }
+
+  // C. Construct the New Document Object
   const newDocument = {
     docType: docType,
-    fileUrl: req.file.filename,
+    fileUrl: req.file.filename, // Multer gives us this
     uploadedAt: Date.now(),
   };
 
-  // 4. Update User: Push to documents array
+  // D. Update Database
+  // We use $push to add to the documents array
   const updatedUser = await User.findByIdAndUpdate(
     req.user.id,
     {
       $push: { documents: newDocument },
     },
-    { new: true, runValidators: true },
+    {
+      new: true, // Return the updated user
+      runValidators: true, // Ensure schema validation runs
+    },
   );
 
+  // E. Send Response
   res.status(200).json({
     status: "success",
+    message: "Document uploaded successfully",
     data: {
+      newDocument, // Send back the new doc so frontend can display it immediately
       user: updatedUser,
-      newDocument,
     },
   });
 });
