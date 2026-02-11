@@ -14,8 +14,11 @@ router.route("/resetPassword/:token").patch(authController.resetPassword);
 router.patch(
   "/updateMyPassword",
   authController.protect,
-  authController.updateMyPassword,
+  authController.updatePassword,
 );
+
+// route for updating user data
+router.patch("/updateMe", authController.protect, userController.updateMe);
 
 router
   .route("/")
