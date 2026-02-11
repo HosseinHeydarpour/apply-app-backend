@@ -14,21 +14,19 @@ router.route("/resetPassword/:token").patch(authController.resetPassword);
 router.patch(
   "/updateMyPassword",
   authController.protect,
-
   authController.updatePassword,
 );
 
 // route for updating user data
-router.patch("/updateMe", authController.protect, userController.updateMe);
+router.patch(
+  "/updateMe",
+  authController.protect,
+  userController.uploadUserPhoto,
+  userController.updateMe,
+);
 
-router
-  .route("/")
-  .get(userController.getAllUsers)
-  .post(userController.createUser);
-router
-  .route("/:id")
-  .get(userController.getUser)
-  .patch(userController.updateUser)
-  .delete(userController.deleteUser);
+router.route("/").get(userController.getAllUsers);
+
+router.route("/:id").get(userController.getUser);
 
 module.exports = router;
