@@ -1,7 +1,40 @@
+const multer = require("multer"); // 1. Import Multer
+const path = require("path");
 const User = require("../model/userModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
+// --- 1. MULTER CONFIGURATION ---
+// Store file on disk
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/images"); // Ensure this folder exists!
+  },
+  filename: (req, file, cb) => {
+    // Generate unique filename: user-USERID-TIMESTAMP.jpeg
+    const ext = path.extname(file.originalname);
+    cb(null, `user-${req.user.id}-${Date.now()}${ext}`);
+  },
+});
+
+// Filter to accept only images
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    cb(new AppError("Not an image! Please upload only images.", 400), false);
+  }
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+// Export the middleware to be used in your ROUTER
+exports.uploadUserPhoto = upload.single("image");
+
+// --- HELPER FUNCTION ---
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
   Object.keys(obj).forEach((el) => {
@@ -10,15 +43,15 @@ const filterObj = (obj, ...allowedFields) => {
   return newObj;
 };
 
+// --- HANDLERS ---
+
 exports.getAllUsers = catchAsync(async (req, res) => {
   const users = await User.find();
 
   res.status(200).json({
     status: "success",
     results: users.length,
-    data: {
-      users,
-    },
+    data: { users },
   });
 });
 
@@ -26,32 +59,9 @@ exports.getUser = catchAsync(async (req, res) => {
   const user = await User.findById(req.params.id);
   res.status(200).json({
     status: "success",
-    data: {
-      user,
-    },
+    data: { user },
   });
 });
-
-exports.createUser = (req, res) => {
-  res.status(500).json({
-    status: "error",
-    message: "Route not implemented yet",
-  });
-};
-
-exports.updateUser = (req, res) => {
-  res.status(500).json({
-    status: "error",
-    message: "Route not implemented yet",
-  });
-};
-
-exports.deleteUser = (req, res) => {
-  res.status(500).json({
-    status: "error",
-    message: "Route not implemented yet",
-  });
-};
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   // 1) Create error if user POSTs password data
@@ -63,9 +73,26 @@ exports.updateMe = catchAsync(async (req, res, next) => {
       ),
     );
   }
-  // 2) Filtered out unwanted fields names that are not allowed to be updated
-  const filteredBody = filterObj(req.body, "name", "email");
-  // 3) Update user document
+
+  // 2) Filter body
+  // based on your schema, you likely use firstName/lastName, not just "name"
+  // ADD 'profileImage' TO THIS LIST if you want to allow it manually,
+  // but we handle it specifically below via req.file
+  const filteredBody = filterObj(
+    req.body,
+    "firstName",
+    "lastName",
+    "email",
+    "phone",
+  );
+
+  // 3) CHECK IF FILE WAS UPLOADED
+  // If Multer processed a file, it sits in req.file
+  if (req.file) {
+    filteredBody.profileImage = req.file.filename;
+  }
+
+  // 4) Update user document
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
     runValidators: true,
