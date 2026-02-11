@@ -25,6 +25,13 @@ router.patch(
   userController.updateMe,
 );
 
+router.post(
+  "/upload-passport",
+  authController.protect,
+  userController.uploadDocumentMiddleware, // Matches upload.single('document')
+  userController.uploadDocument,
+);
+
 router.route("/").get(userController.getAllUsers);
 
 router.route("/:id").get(userController.getUser);

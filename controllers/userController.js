@@ -105,3 +105,40 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+exports.uploadDocumentMiddleware = upload.single("document");
+
+exports.uploadDocument = catchAsync(async (req, res, next) => {
+  // 1. Check if file exists
+  if (!req.file) {
+    return next(new AppError("No file uploaded!", 400));
+  }
+
+  // 2. Get the docType from the body (sent by frontend)
+  // We default to 'passport' if not provided, but frontend should send it.
+  const docType = req.body.docType || "passport";
+
+  // 3. Create the new document object based on your Schema
+  const newDocument = {
+    docType: docType,
+    fileUrl: req.file.filename,
+    uploadedAt: Date.now(),
+  };
+
+  // 4. Update User: Push to documents array
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      $push: { documents: newDocument },
+    },
+    { new: true, runValidators: true },
+  );
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      user: updatedUser,
+      newDocument,
+    },
+  });
+});
