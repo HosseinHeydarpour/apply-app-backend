@@ -34,6 +34,11 @@ const universitySchema = new mongoose.Schema({
     maxlength: [200, "Website cannot be more than 200 characters"],
   },
   // مثلا رنکینگ یا فیلدهای اضافه
+  rating: {
+    type: Number,
+    min: [0, "Rating cannot be less than 0"],
+    max: [5, "Rating cannot be more than 5"],
+  },
 });
 
 const University = mongoose.model("University", universitySchema);

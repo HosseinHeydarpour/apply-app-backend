@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const fs = require("fs");
-const Tour = require("../../model/tourModel");
+const Tour = require("../../model/universityModel");
 // Because this is on the proccess and  the proccess is always the same for all of our js files we have access to this
 dotenv.config({
   path: "./config.env",
@@ -21,14 +21,14 @@ mongoose
   })
   .then(() => console.log("DB connection Successful"));
 
-const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/tours-simple.json`, "utf-8"),
+const universities = JSON.parse(
+  fs.readFileSync(`${__dirname}/unis.json`, "utf-8"),
 );
 
 // Import data into db
 const importData = async () => {
   try {
-    await Tour.create(tours);
+    await Tour.create(universities);
     console.log("Data successfully loaded!");
   } catch (error) {
     console.log(error);
