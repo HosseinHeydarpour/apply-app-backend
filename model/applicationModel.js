@@ -23,15 +23,6 @@ const applicationSchema = new mongoose.Schema(
       },
       default: "pending",
     },
-
-    // توضیحات کاربر هنگام ثبت درخواست
-    userNote: {
-      type: String,
-      trim: true,
-      maxlength: [1000, "Note cannot be more than 1000 characters"],
-    },
-
-    // فیلد برای تاریخچه (History)
   },
   { timestamps: true },
 ); // خودش createdAt و updatedAt را می‌سازد

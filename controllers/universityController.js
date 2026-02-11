@@ -3,6 +3,12 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const University = require("../model/universityModel");
 
+exports.aliasTopUniversities = (req, res, next) => {
+  req.query.limit = "3";
+  req.query.sort = "-rating";
+  next();
+};
+
 exports.getAllUniversities = catchAsync(async (req, res, next) => {
   const features = new APIFeatures(University.find(), req.query)
     .filter()
