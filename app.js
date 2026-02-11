@@ -1,5 +1,5 @@
 const express = require("express");
-
+const cors = require("cors");
 const morgan = require("morgan");
 const agencyRoute = require("./routes/agencyRoutes");
 const userRoute = require("./routes/userRoutes");
@@ -11,6 +11,8 @@ const app = express();
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+
+app.use(cors({ origin: "http://localhost:4200" }));
 
 // Middleware
 app.use(express.json());
