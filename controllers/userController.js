@@ -22,12 +22,15 @@ exports.getAllUsers = catchAsync(async (req, res) => {
   });
 });
 
-exports.getUser = (req, res) => {
-  res.status(500).json({
-    status: "error",
-    message: "Route not implemented yet",
+exports.getUser = catchAsync(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  res.status(200).json({
+    status: "success",
+    data: {
+      user,
+    },
   });
-};
+});
 
 exports.createUser = (req, res) => {
   res.status(500).json({
