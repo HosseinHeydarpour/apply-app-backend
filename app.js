@@ -3,6 +3,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const agencyRoute = require("./routes/agencyRoutes");
 const userRoute = require("./routes/userRoutes");
+const universityRoute = require("./routes/universityRoutes");
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
 
@@ -17,8 +18,6 @@ app.use(cors({ origin: "http://localhost:4200" }));
 // Middleware
 app.use(express.json());
 
-app.use(express.static(`${__dirname}/public`));
-
 // OPTIONS: "dev" | "combined" | "short" | "tiny"
 app.use(morgan("dev"));
 
@@ -31,6 +30,7 @@ app.use((req, res, next) => {
 
 app.use("/api/v1/agencies", agencyRoute);
 app.use("/api/v1/users", userRoute);
+app.use("/api/v1/universities", universityRoute);
 
 // All other routes
 app.all("*", (req, res, next) => {
