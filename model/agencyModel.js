@@ -26,6 +26,7 @@ const agencySchema = new mongoose.Schema(
         ref: "University",
       },
     ],
+    rating: { type: Number, default: 0, min: 0, max: 5 },
     createdAt: { type: Date, default: Date.now, select: false },
   },
   {

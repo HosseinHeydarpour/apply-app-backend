@@ -1,29 +1,108 @@
 [
   {
-    "id": 0,
-    "name": "موسسه مهاجرتی افق دانش",
-    "logoUrl": "https://example.com/images/logo-ofogh.png",
-    "description": "با بیش از ۱۰ سال سابقه در اخذ پذیرش تحصیلی از دانشگاه‌های معتبر کانادا و آلمان. ارائه خدمات مشاوره و ویزا.",
-    "contactInfo": "تهران، خیابان ولیعصر، پلاک ۱. تلفن: ۰۲۱-۸۸۸۸۸۸۸۸ | ایمیل: info@ofoghdanesh.com",
+    "name": "موسسه مهاجرتی پارس اپلای",
+    "logoUrl": "pars-apply.png",
+    "description": "پارس اپلای یکی از موسسات معتبر در زمینه اعزام دانشجو به کشورهای آمریکا، کانادا و اروپا است که با بیش از ۱۰ سال سابقه موفق، خدمات مشاوره تحصیلی، اخذ پذیرش و ویزا را ارائه می‌دهد.",
+    "contactInfo": "021-88888888 | info@parsapply.ir",
+    "slug": "pars-apply",
+    "rating": 4.8,
     "supportedUniversities": [
-      "65bf7a1b9c9d4b0012345678",
-      "65bf7a1b9c9d4b0012345679"
+      "698c29325cb3b66740f6ed92",
+      "698c29325cb3b66740f6ed93",
+      "698c29325cb3b66740f6ed94"
     ]
   },
   {
-    "id": 1,
-    "name": "آکادمی اپلای پلاس",
-    "logoUrl": "https://example.com/images/apply-plus.jpg",
-    "description": "تخصصی‌ترین مرکز اعزام دانشجو به ایتالیا و فرانسه همراه با بورسیه استانی.",
-    "contactInfo": "شیراز، بلوار ارم. تماس: ۰۹۱۲۳۴۵۶۷۸۹",
-    "supportedUniversities": ["65bf7a1b9c9d4b0012345680"]
+    "name": "موسسه اعزام دانشجو آریانا",
+    "logoUrl": "ariana.png",
+    "description": "آریانا با تمرکز ویژه بر کشورهای اروپایی به‌ویژه آلمان و سوئیس، خدمات تخصصی در زمینه اپلای تحصیلی، اخذ بورسیه و پذیرش دانشگاهی ارائه می‌دهد.",
+    "contactInfo": "021-77777777 | contact@arianaedu.com",
+    "slug": "ariana-edu",
+    "rating": 4.6,
+    "supportedUniversities": [
+      "698c29325cb3b66740f6ed96",
+      "698c29325cb3b66740f6ed97",
+      "698c29325cb3b66740f6ed93"
+    ]
   },
   {
-    "id": 2,
-    "name": "موسسه رهپویان علم",
-    "logoUrl": null,
-    "description": "مشاوره رایگان برای تحصیل در مقاطع کارشناسی ارشد و دکتری در آمریکا.",
-    "contactInfo": "ایمیل: support@rahpouyan.ir",
-    "supportedUniversities": []
+    "name": "موسسه دانش‌پژوهان فردا",
+    "logoUrl": "daneshpajouhan.png",
+    "description": "دانش‌پژوهان فردا ارائه‌دهنده خدمات جامع مشاوره تحصیلی برای اپلای به دانشگاه‌های برتر کانادا و استرالیا با بیش از ۵۰۰ پرونده موفق.",
+    "contactInfo": "021-66666666 | support@dpedu.ir",
+    "slug": "daneshpajouhan-farda",
+    "rating": 4.7,
+    "supportedUniversities": [
+      "698c29325cb3b66740f6ed94",
+      "698c29325cb3b66740f6ed98",
+      "698c29325cb3b66740f6ed95"
+    ]
+  },
+  {
+    "name": "موسسه اپلای پلاس",
+    "logoUrl": "apply-plus.png",
+    "description": "اپلای پلاس با تیمی از مشاوران حرفه‌ای، خدمات تخصصی در زمینه اپلای تحصیلی، ویزای دانشجویی و بورسیه برای دانشگاه‌های تراز اول جهان ارائه می‌دهد.",
+    "contactInfo": "021-55555555 | hello@applyplus.com",
+    "slug": "apply-plus",
+    "rating": 4.9,
+    "supportedUniversities": [
+      "698c29325cb3b66740f6ed92",
+      "698c29325cb3b66740f6ed93",
+      "698c29325cb3b66740f6ed96",
+      "698c29325cb3b66740f6ed97"
+    ]
+  },
+  {
+    "name": "موسسه راه دانش",
+    "logoUrl": "rahdanesh.png",
+    "description": "راه دانش با تمرکز بر مهاجرت تحصیلی کم‌هزینه، اپلای به دانشگاه‌های آلمان، سوئیس و کانادا را برای دانشجویان فراهم می‌کند.",
+    "contactInfo": "021-44444444 | info@rahdanesh.org",
+    "slug": "rah-danesh",
+    "rating": 4.4,
+    "supportedUniversities": [
+      "698c29325cb3b66740f6ed97",
+      "698c29325cb3b66740f6ed96",
+      "698c29325cb3b66740f6ed98"
+    ]
+  },
+  {
+    "name": "موسسه آینده‌سازان",
+    "logoUrl": "ayandehsazan.png",
+    "description": "آینده‌سازان با رویکرد تخصصی در زمینه اپلای تحصیلی و اخذ بورسیه کامل برای دانشگاه‌های برتر آمریکا و کانادا فعالیت می‌کند.",
+    "contactInfo": "021-33333333 | contact@ayandehsazan.com",
+    "slug": "ayandehsazan",
+    "rating": 4.5,
+    "supportedUniversities": [
+      "698c29325cb3b66740f6ed92",
+      "698c29325cb3b66740f6ed94",
+      "698c29325cb3b66740f6ed98"
+    ]
+  },
+  {
+    "name": "موسسه بین‌المللی سپهر",
+    "logoUrl": "sepehr.png",
+    "description": "سپهر یکی از موسسات پیشرو در زمینه مهاجرت تحصیلی و کاری به اروپا، کانادا و استرالیا است که خدمات جامع مشاوره و پرونده‌سازی ارائه می‌دهد.",
+    "contactInfo": "021-22222222 | info@sepehrint.com",
+    "slug": "sepehr-international",
+    "rating": 4.6,
+    "supportedUniversities": [
+      "698c29325cb3b66740f6ed95",
+      "698c29325cb3b66740f6ed96",
+      "698c29325cb3b66740f6ed93"
+    ]
+  },
+  {
+    "name": "موسسه نخبگان فردا",
+    "logoUrl": "nobegan.png",
+    "description": "نخبگان فردا خدمات تخصصی اپلای، نگارش رزومه و SOP حرفه‌ای و آمادگی برای مصاحبه دانشگاه‌های بین‌المللی را ارائه می‌دهد.",
+    "contactInfo": "021-11111111 | hello@nobeganedu.ir",
+    "slug": "nobegan-farda",
+    "rating": 4.9,
+    "supportedUniversities": [
+      "698c29325cb3b66740f6ed92",
+      "698c29325cb3b66740f6ed93",
+      "698c29325cb3b66740f6ed94",
+      "698c29325cb3b66740f6ed95"
+    ]
   }
 ]
