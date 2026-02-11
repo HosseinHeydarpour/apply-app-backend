@@ -5,7 +5,6 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 
 const crypto = require("crypto");
-const { title } = require("process");
 
 const userSchema = new mongoose.Schema(
   {
@@ -58,8 +57,8 @@ const userSchema = new mongoose.Schema(
     // مدارک به صورت آرایه ذخیره می‌شوند تا قابلیت گسترش داشته باشد
     documents: [
       {
+        title: String,
         docType: {
-          title: String,
           type: String,
           enum: {
             values: ["passport", "scoreList", "cv", "other"], // انواع مجاز
