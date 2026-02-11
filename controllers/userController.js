@@ -258,3 +258,17 @@ exports.requestConsultation = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+exports.getUserHistory = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user.id)
+    .populate("applications.university") // <--- Swaps ID for University details
+    .populate("consultations.consultant"); // <--- Swaps ID for Agency details
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      applications: user.applications,
+      consultations: user.consultations,
+    },
+  });
+});

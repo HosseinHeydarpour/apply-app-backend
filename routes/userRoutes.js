@@ -40,6 +40,8 @@ router.post(
   userController.requestConsultation,
 );
 
+router.get("/history", authController.protect, userController.getUserHistory);
+
 router.route("/").get(authController.protect, userController.getAllUsers);
 
 router.route("/:id").get(authController.protect, userController.getUser);
