@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const agencyRoute = require("./routes/agencyRoutes");
 const userRoute = require("./routes/userRoutes");
 const universityRoute = require("./routes/universityRoutes");
+const adRoute = require("./routes/adRoutes");
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
 
@@ -33,6 +34,7 @@ app.use((req, res, next) => {
 app.use("/api/v1/agencies", agencyRoute);
 app.use("/api/v1/users", userRoute);
 app.use("/api/v1/universities", universityRoute);
+app.use("/api/v1/ads", adRoute);
 
 // All other routes
 app.all("*", (req, res, next) => {
