@@ -94,6 +94,13 @@ router.post(
 // مشاهده تاریخچه فعالیت‌های کاربر
 router.get("/history", authController.protect, userController.getUserHistory);
 
+//  حذف یک سند
+router.delete(
+  "/delete-document/:docId", // :docId is required
+  authController.protect, // User must be logged in
+  userController.deleteDocument,
+);
+
 /**
  * @route   GET / (Root for users)
  * @desc    دریافت لیست همه کاربران (معمولاً برای پنل ادمین)

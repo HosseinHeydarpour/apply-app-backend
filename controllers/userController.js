@@ -1,4 +1,5 @@
 const multer = require("multer"); // کتابخانه مدیریت آپلود فایل
+const fs = require("fs");
 const path = require("path");
 const User = require("../model/userModel");
 const catchAsync = require("../utils/catchAsync");
@@ -338,5 +339,51 @@ exports.getUserHistory = catchAsync(async (req, res, next) => {
       applications: user.applications,
       consultations: user.consultations,
     },
+  });
+});
+
+/**
+ * حذف یک داکیومنت خاص.
+ *
+ * این تابع هم فایل را از روی سرور پاک می‌کند و هم اطلاعات آن را از دیتابیس حذف می‌کند.
+ *
+ * @function deleteDocument
+ */
+exports.deleteDocument = catchAsync(async (req, res, next) => {
+  // ۱. دریافت ID داکیومنت از پارامترهای URL
+  const { docId } = req.params;
+
+  // ۲. پیدا کردن کاربر برای دسترسی به لیست داکیومنت‌ها
+  const user = await User.findById(req.user.id);
+
+  // ۳. پیدا کردن داکیومنت مورد نظر در آرایه documents
+  // متد .id() یک متد مخصوص Mongoose برای پیدا کردن ساب‌داکیومنت در آرایه است.
+  const docToDelete = user.documents.id(docId);
+
+  if (!docToDelete) {
+    return next(new AppError("No document found with that ID.", 404));
+  }
+
+  // ۴. حذف فایل فیزیکی از روی سرور
+  // مسیر فایل: public/images/filename
+  const filePath = path.join("public/images", docToDelete.fileUrl);
+
+  // دستور unlink فایل را پاک می‌کند.
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      // اگر فایل پیدا نشد یا قبلا پاک شده بود، فقط لاگ می‌اندازیم و ادامه می‌دهیم
+      console.error("Could not delete file from server:", err);
+    }
+  });
+
+  // ۵. حذف داکیومنت از دیتابیس با استفاده از $pull
+  // دستور $pull آیتمی که مشخصاتش (اینجا _id) تطابق دارد را از آرایه بیرون می‌کشد.
+  await User.findByIdAndUpdate(req.user.id, {
+    $pull: { documents: { _id: docId } },
+  });
+
+  res.status(204).json({
+    status: "success",
+    data: null,
   });
 });
