@@ -1,9 +1,23 @@
+/**
+ * تابع catchAsync
+ * هدف: حذف بلوک‌های تکراری try-catch در توابع async.
+ * این یک "تابع مرتبه بالا" (Higher-Order Function) است، یعنی تابعی که یک تابع دیگر را برمی‌گرداند.
+ *
+ * @param {Function} fn - تابع اصلی ما که ممکن است در آن خطایی رخ دهد (یک تابع ناهمگام/Async).
+ * @returns {Function} - یک تابع جدید که خطاهای احتمالی را مدیریت می‌کند.
+ */
 module.exports = (fn) => {
-  // 1. receives your function (fn) as an argument
+  // ۱. این تابع، تابع اصلی شما (fn) را به عنوان ورودی می‌گیرد.
   return (req, res, next) => {
-    // 2. returns a new anonymous function that Express calls
+    // ۲. یک تابع ناشناس جدید برمی‌گرداند که اکسپرس (Express) آن را اجرا خواهد کرد.
+
+    // ۳. تابع اصلی شما (fn) را اجرا می‌کند.
+    // چون تابع شما async است، همیشه یک Promise برمی‌گرداند.
     fn(req, res, next).catch((err) => next(err));
-    // 3. runs your function. Because it's async, it returns a Promise.
-    // 4. .catch() waits for that promise to fail. If it does, it calls next(err).
+
+    // ۴. توضیح خط بالا:
+    // بخش .catch() منتظر می‌ماند تا اگر خطایی رخ داد، آن را بگیرد.
+    // اگر خطایی بود، آن را با دستور next(err) به "مدیریت کننده خطای مرکزی" اکسپرس می‌فرستد.
+    // این کار باعث می‌شود برنامه کرش نکند و خطا به صورت مدیریت شده پاسخ داده شود.
   };
 };
