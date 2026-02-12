@@ -1,40 +1,72 @@
-const multer = require("multer"); // 1. Import Multer
+const multer = require("multer"); // کتابخانه مدیریت آپلود فایل
 const path = require("path");
 const User = require("../model/userModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
-// --- 1. MULTER CONFIGURATION ---
-// Store file on disk
+// --- 1. تنظیمات آپلود فایل (MULTER CONFIGURATION) ---
+
+/**
+ * تنظیمات محل ذخیره‌سازی فایل‌ها.
+ *
+ * Multer نیاز دارد بداند فایل را کجا ذخیره کند و چه نامی برایش بگذارد.
+ * ما از diskStorage استفاده می‌کنیم تا فایل را روی هارد دیسک سرور ذخیره کنیم.
+ */
 const multerStorage = multer.diskStorage({
+  // ۱. تعیین پوشه مقصد (Destination).
   destination: (req, file, cb) => {
-    cb(null, "public/images"); // Ensure this folder exists!
+    // cb (Callback) مثل دکمه تایید است. ورودی اول خطا (که نداریم null) و ورودی دوم آدرس پوشه است.
+    cb(null, "public/images"); // پوشه‌ای که عکس‌ها آنجا می‌روند.
   },
+  // ۲. تعیین نام فایل (Filename).
   filename: (req, file, cb) => {
-    // Generate unique filename: user-USERID-TIMESTAMP.jpeg
-    const ext = path.extname(file.originalname);
+    // هدف: ساخت یک نام یکتا تا اگر دو کاربر عکسی با نام me.jpg آپلود کردند، روی هم بازنویسی نشود.
+    // فرمت نام: user-شناسه_کاربر-زمان_فعلی.پسوند
+    // مثال: user-65a2b3c-1702345678.jpeg
+    const ext = path.extname(file.originalname); // پسوند فایل اصلی (مثلا .jpg) را می‌گیرد.
     cb(null, `user-${req.user.id}-${Date.now()}${ext}`);
   },
 });
 
-// Filter to accept only images
+/**
+ * فیلتر کردن فایل‌ها (فقط عکس مجاز است).
+ *
+ * این تابع بررسی می‌کند فایلی که کاربر فرستاده واقعاً عکس است یا خیر.
+ */
 const multerFilter = (req, file, cb) => {
+  // mimetype نوع فایل را نشان می‌دهد (مثلا image/jpeg یا image/png).
   if (file.mimetype.startsWith("image")) {
-    cb(null, true);
+    cb(null, true); // تایید است.
   } else {
+    // اگر عکس نبود، ارور می‌دهیم.
     cb(new AppError("Not an image! Please upload only images.", 400), false);
   }
 };
 
+// راه‌اندازی نهایی Multer با تنظیماتی که بالا ساختیم.
 const upload = multer({
   storage: multerStorage,
   fileFilter: multerFilter,
 });
 
-// Export the middleware to be used in your ROUTER
+/**
+ * میدل‌ویر آپلود عکس پروفایل.
+ * این تابع یک فایل با نام فیلد 'image' را از فرم دریافت و پردازش می‌کند.
+ */
 exports.uploadUserPhoto = upload.single("image");
 
-// --- HELPER FUNCTION ---
+// --- توابع کمکی (HELPER FUNCTIONS) ---
+
+/**
+ * فیلتر کردن آبجکت ورودی.
+ *
+ * هدف: امنیت. فرض کنید کاربر بخواهد فیلد role: 'admin' را در آپدیت پروفایل بفرستد.
+ * ما با این تابع فقط اجازه‌ی عبور فیلدهای مجاز (مثل نام و ایمیل) را می‌دهیم.
+ *
+ * @param {Object} obj - آبجکت حاوی تمام اطلاعات ارسالی کاربر (req.body).
+ * @param {...string} allowedFields - لیست فیلدهایی که مجاز هستند (مثل 'name', 'email').
+ * @returns {Object} - آبجکت جدید که فقط فیلدهای مجاز را دارد.
+ */
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
   Object.keys(obj).forEach((el) => {
@@ -43,8 +75,13 @@ const filterObj = (obj, ...allowedFields) => {
   return newObj;
 };
 
-// --- HANDLERS ---
+// --- هندلرها (HANDLERS) ---
 
+/**
+ * دریافت لیست تمام کاربران.
+ *
+ * @function getAllUsers
+ */
 exports.getAllUsers = catchAsync(async (req, res) => {
   const users = await User.find();
 
@@ -55,6 +92,11 @@ exports.getAllUsers = catchAsync(async (req, res) => {
   });
 });
 
+/**
+ * دریافت اطلاعات یک کاربر خاص با ID.
+ *
+ * @function getUser
+ */
 exports.getUser = catchAsync(async (req, res) => {
   const user = await User.findById(req.params.id);
   res.status(200).json({
@@ -63,8 +105,16 @@ exports.getUser = catchAsync(async (req, res) => {
   });
 });
 
+/**
+ * بروزرسانی اطلاعات شخصی کاربر (Update Me).
+ *
+ * کاربر لاگین شده می‌تواند نام، ایمیل و عکس پروفایل خود را تغییر دهد.
+ * نکته: رمز عبور اینجا عوض نمی‌شود.
+ *
+ * @function updateMe
+ */
 exports.updateMe = catchAsync(async (req, res, next) => {
-  // 1) Create error if user POSTs password data
+  // ۱. اگر کاربر سعی کرد رمز عبور را اینجا بفرستد، خطا بده.
   if (req.body.password || req.body.passwordConfirm) {
     return next(
       new AppError(
@@ -74,10 +124,8 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     );
   }
 
-  // 2) Filter body
-  // based on your schema, you likely use firstName/lastName, not just "name"
-  // ADD 'profileImage' TO THIS LIST if you want to allow it manually,
-  // but we handle it specifically below via req.file
+  // ۲. فیلتر کردن بدنه درخواست.
+  // فقط اجازه می‌دهیم نام، ایمیل و تلفن آپدیت شوند.
   const filteredBody = filterObj(
     req.body,
     "firstName",
@@ -86,16 +134,17 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     "phone",
   );
 
-  // 3) CHECK IF FILE WAS UPLOADED
-  // If Multer processed a file, it sits in req.file
+  // ۳. بررسی آپلود عکس.
+  // اگر Multer فایلی را پردازش کرده باشد، اطلاعاتش در req.file موجود است.
   if (req.file) {
+    // نام فایل ذخیره شده را به دیتابیس اضافه می‌کنیم.
     filteredBody.profileImage = req.file.filename;
   }
 
-  // 4) Update user document
+  // ۴. آپدیت کردن داکیومنت کاربر در دیتابیس.
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
-    new: true,
-    runValidators: true,
+    new: true, // نسخه جدید را برگردان
+    runValidators: true, // اعتبارسنجی کن (مثلا فرمت ایمیل درست باشد)
   });
 
   res.status(200).json({
@@ -106,18 +155,25 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ * میدل‌ویر برای آپلود فایل داکیومنت (مثل رزومه یا پاسپورت).
+ * نام فیلد در فرم باید 'document' باشد.
+ */
 exports.uploadDocumentMiddleware = upload.single("document");
 
+/**
+ * ذخیره اطلاعات داکیومنت آپلود شده در پروفایل کاربر.
+ *
+ * @function uploadDocument
+ */
 exports.uploadDocument = catchAsync(async (req, res, next) => {
-  // A. Validation: Check if file exists
+  // الف) چک کردن اینکه آیا فایلی آپلود شده است؟
   if (!req.file) {
     return next(new AppError("No file uploaded. Please select a file.", 400));
   }
 
-  // B. Validation: Check docType and Title
+  // ب) اعتبارسنجی نوع داکیومنت.
   const allowedTypes = ["passport", "scoreList", "cv", "other"];
-
-  // 1. Extract 'title' along with 'docType'
   const { docType, title } = req.body;
 
   if (!docType || !allowedTypes.includes(docType)) {
@@ -129,23 +185,21 @@ exports.uploadDocument = catchAsync(async (req, res, next) => {
     );
   }
 
-  // 2. (Optional) Enforce title requirement for "other" types
+  // ج) اگر نوع فایل "سایر" (other) است، حتما باید عنوان داشته باشد.
   if (docType === "other" && !title) {
     return next(new AppError("Please provide a title for this document.", 400));
   }
 
-  // C. Construct the New Document Object
+  // د) ساختن آبجکت داکیومنت برای ذخیره در آرایه.
   const newDocument = {
     docType: docType,
-    // 3. Save the title.
-    // If it's 'passport', title becomes 'passport' (unless frontend sends a custom one)
-    // If it's 'other', it uses the title the user typed.
-    title: title || docType,
-    fileUrl: req.file.filename,
+    title: title || docType, // اگر عنوان خاصی نداد، همان نوع فایل را عنوان قرار بده.
+    fileUrl: req.file.filename, // نام فایل روی سرور.
     uploadedAt: Date.now(),
   };
 
-  // D. Update Database
+  // هـ) آپدیت دیتابیس (استفاده از $push).
+  // $push یک دستور مونگو دی‌بی است که آیتم جدید را به انتهای آرایه 'documents' اضافه می‌کند.
   const updatedUser = await User.findByIdAndUpdate(
     req.user.id,
     {
@@ -157,7 +211,6 @@ exports.uploadDocument = catchAsync(async (req, res, next) => {
     },
   );
 
-  // E. Send Response
   res.status(200).json({
     status: "success",
     message: "Document uploaded successfully",
@@ -168,20 +221,25 @@ exports.uploadDocument = catchAsync(async (req, res, next) => {
   });
 });
 
-// --- APPLICATION & CONSULTATION HANDLERS ---
+// --- هندلرهای درخواست و مشاوره ---
 
+/**
+ * ثبت درخواست اپلای برای یک دانشگاه.
+ *
+ * @function applyToUniversity
+ */
 exports.applyToUniversity = catchAsync(async (req, res, next) => {
   const { universityId } = req.body;
 
-  // 1. Check if ID is provided
+  // ۱. چک کردن وجود ID دانشگاه.
   if (!universityId) {
     return next(new AppError("Please provide a university ID.", 400));
   }
 
-  // 2. Fetch user to check for duplicates
+  // ۲. دریافت اطلاعات کاربر برای چک کردن تکراری نبودن.
   const user = await User.findById(req.user.id);
 
-  // 3. Check if user already applied to this university
+  // ۳. چک کردن اینکه آیا قبلا برای این دانشگاه درخواست داده یا نه؟
   const existingApplication = user.applications.find(
     (app) => app.university.toString() === universityId,
   );
@@ -192,15 +250,14 @@ exports.applyToUniversity = catchAsync(async (req, res, next) => {
     );
   }
 
-  // 4. Update User with new Application
-  // We use $push to add to the array
+  // ۴. اضافه کردن درخواست جدید به آرایه applications.
   const updatedUser = await User.findByIdAndUpdate(
     req.user.id,
     {
       $push: {
         applications: {
           university: universityId,
-          status: "pending", // Default is pending, but being explicit is safe
+          status: "pending", // وضعیت پیش‌فرض: در انتظار بررسی.
           appliedAt: Date.now(),
         },
       },
@@ -209,7 +266,7 @@ exports.applyToUniversity = catchAsync(async (req, res, next) => {
       new: true,
       runValidators: true,
     },
-  ).populate("applications.university"); // Optional: Populate to send back full details
+  ).populate("applications.university"); // برای اینکه در پاسخ، اطلاعات کامل دانشگاه هم بیاید.
 
   res.status(200).json({
     status: "success",
@@ -220,23 +277,27 @@ exports.applyToUniversity = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ * ثبت درخواست مشاوره از یک آژانس.
+ *
+ * @function requestConsultation
+ */
 exports.requestConsultation = catchAsync(async (req, res, next) => {
   const { agencyId, scheduledAt } = req.body;
 
-  // 1. Check if Agency ID is provided
   if (!agencyId) {
     return next(new AppError("Please provide an Agency ID.", 400));
   }
 
-  // 2. Update User with new Consultation
+  // اضافه کردن درخواست مشاوره به لیست مشاوره‌های کاربر.
   const updatedUser = await User.findByIdAndUpdate(
     req.user.id,
     {
       $push: {
         consultations: {
-          consultant: agencyId, // matches your schema ref: 'Agency'
+          consultant: agencyId,
           status: "pending",
-          scheduledAt: scheduledAt || Date.now(), // Use provided date or default to now
+          scheduledAt: scheduledAt || Date.now(),
         },
       },
     },
@@ -246,7 +307,7 @@ exports.requestConsultation = catchAsync(async (req, res, next) => {
     },
   );
 
-  // 3. Get the newly added consultation (it will be the last one in the array)
+  // دریافت آخرین مشاوره اضافه شده برای نمایش به کاربر.
   const newConsultation =
     updatedUser.consultations[updatedUser.consultations.length - 1];
 
@@ -259,10 +320,17 @@ exports.requestConsultation = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ * دریافت تاریخچه فعالیت‌های کاربر (درخواست‌ها و مشاوره‌ها).
+ *
+ * این تابع به جای اینکه فقط ID دانشگاه را نشان دهد، اطلاعات کامل آن را بارگذاری می‌کند.
+ *
+ * @function getUserHistory
+ */
 exports.getUserHistory = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user.id)
-    .populate("applications.university") // <--- Swaps ID for University details
-    .populate("consultations.consultant"); // <--- Swaps ID for Agency details
+    .populate("applications.university") // <--- جایگزینی ID دانشگاه با اطلاعات کامل آن
+    .populate("consultations.consultant"); // <--- جایگزینی ID آژانس با اطلاعات کامل آن
 
   res.status(200).json({
     status: "success",

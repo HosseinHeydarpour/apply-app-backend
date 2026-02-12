@@ -1,21 +1,42 @@
 const Ad = require("../model/adModel");
 const APIFeatures = require("../utils/apiFeatures");
 const catchAsync = require("../utils/catchAsync");
-const AppError = require("../utils/appError");
 
-exports.getAllAds = catchAsync(async (req, res) => {
+/**
+ * کنترلر دریافت تمام آگهی‌ها (Get All Ads).
+ *
+ * هدف این تابع این است که لیست آگهی‌ها را از دیتابیس بگیرد و به کاربر نشان دهد.
+ * نکته مهم اینجاست که این تابع از قابلیت‌های پیشرفته‌ای مثل فیلتر کردن، مرتب‌سازی و صفحه‌بندی پشتیبانی می‌کند.
+ *
+ * @function getAllAds
+ * @param {Object} req - آبجکت درخواست (Request). حاوی اطلاعاتی است که کاربر فرستاده (مثل فیلترهایی که در آدرس URL نوشته).
+ * @param {Object} res - آبجکت پاسخ (Response). ابزاری که با آن جواب نهایی را به کاربر می‌فرستیم.
+ * @param {Function} next - تابعی برای انتقال خطا به میدل‌ویر بعدی (در صورت وجود خطا).
+ * @returns {Promise<void>} - این تابع یک خروجی JSON برمی‌گرداند که شامل لیست آگهی‌هاست.
+ */
+exports.getAllAds = catchAsync(async (req, res, next) => {
+  // ۱. ساخت کوئری (پرس‌وجو) پیشرفته با استفاده از کلاس APIFeatures.
+  // توضیح برای استاد: ما یک کلاس کمکی به نام APIFeatures داریم.
+  // ورودی اول (Ad.find()): دستور پایه برای پیدا کردن همه آگهی‌ها در دیتابیس است.
+  // ورودی دوم (req.query): پارامترهایی است که کاربر در URL وارد کرده (مثلاً ?price[gte]=1000&sort=price).
   const features = new APIFeatures(Ad.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
+    .filter() // اعمال فیلترها (مثلاً فقط آگهی‌های ارزان‌تر از یک مبلغ خاص)
+    .sort() // مرتب‌سازی نتایج (مثلاً از جدیدترین به قدیمی‌ترین)
+    .limitFields() // محدود کردن فیلدها (مثلاً فقط نام و قیمت را برگردان، بقیه اطلاعات را نیار)
+    .paginate(); // صفحه‌بندی (مثلاً فقط ۱۰ تای اول را در صفحه ۱ نشان بده)
+
+  // ۲. اجرای کوئری نهایی.
+  // توضیح برای استاد: تا مرحله قبل فقط دستورات را آماده کردیم. در این خط با کلمه کلیدی 'await'،
+  // منتظر می‌مانیم تا دیتابیس جستجو را انجام دهد و نتایج واقعی را داخل متغیر 'ads' بریزد.
   const ads = await features.query;
 
+  // ۳. ارسال پاسخ به کاربر (Client).
+  // توضیح برای استاد: اینجا وضعیت 200 (به معنی موفقیت) را تنظیم می‌کنیم و داده‌ها را به فرمت استاندارد JSON می‌فرستیم.
   res.status(200).json({
-    status: "success",
-    results: ads.length,
+    status: "success", // وضعیت کلی عملیات
+    results: ads.length, // تعداد آگهی‌های پیدا شده (برای نمایش به کاربر مفید است)
     data: {
-      ads,
+      ads, // خودِ آرایه آگهی‌ها که از دیتابیس گرفتیم
     },
   });
 });
