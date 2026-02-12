@@ -4,6 +4,7 @@
   "description": "backend for pazireshino webapp",
   "main": "app.js",
   "scripts": {
+    "start": "node server.js",
     "start:dev": "nodemon server.js",
     "start:prod": "cross-env NODE_ENV=production node server.js",
     "debug": "ndb server.js"
