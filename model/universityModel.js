@@ -1,5 +1,10 @@
 const mongoose = require("mongoose");
 
+/**
+ * @description
+ * اسکیمای دانشگاه‌ها (University Schema).
+ * اطلاعات پایه دانشگاه مثل نام، کشور، شهر و وب‌سایت را نگهداری می‌کند.
+ */
 const universitySchema = new mongoose.Schema({
   name: {
     type: String,
@@ -33,11 +38,11 @@ const universitySchema = new mongoose.Schema({
     trim: true,
     maxlength: [200, "Website cannot be more than 200 characters"],
   },
-  // مثلا رنکینگ یا فیلدهای اضافه
+  // سیستم امتیازدهی به دانشگاه (بین 0 تا 5)
   rating: {
     type: Number,
-    min: [0, "Rating cannot be less than 0"],
-    max: [5, "Rating cannot be more than 5"],
+    min: [0, "Rating cannot be less than 0"], // حداقل مقدار
+    max: [5, "Rating cannot be more than 5"], // حداکثر مقدار
   },
 });
 
