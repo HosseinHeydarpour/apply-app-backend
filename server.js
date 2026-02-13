@@ -37,13 +37,7 @@ const DB = process.env.DATABASE;
  * اتصال به پایگاه داده MongoDB با استفاده از کتابخانه Mongoose
  * این تنظیمات (useNewUrlParser, ...) برای سازگاری با نسخه‌های جدید مونگو‌دی‌بی است
  */
-mongoose
-  .connect(DB, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false, // Note: standard is usually false here
-  })
-  .then(() => console.log("DB connection Successful")); // اگر اتصال موفق بود، این پیام چاپ می‌شود
+mongoose.connect(DB, {}).then(() => console.log("DB connection Successful")); // اگر اتصال موفق بود، این پیام چاپ می‌شود
 
 // تعیین پورت سرور (اگر در فایل env بود از آن استفاده کن، وگرنه پورت 3000)
 const PORT = process.env.PORT || 3000;
