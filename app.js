@@ -41,7 +41,27 @@ if (process.env.NODE_ENV === "development") {
 
 // فعال‌سازی CORS برای اجازه دسترسی به فرانت‌اند (مثلاً سایت انگولار روی پورت 4200)
 // این خط باعث می‌شود مرورگر جلوی درخواست‌های بین دامنه‌ای را نگیرد
-app.use(cors({ origin: "http://localhost:4200" }));
+const allowedOrigins = [
+  "http://localhost:4200",
+  "https://apply-app-front.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg =
+          "The CORS policy for this site does not allow access from the specified Origin.";
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    credentials: true, // Optional: only if you are using cookies/sessions
+  }),
+);
 
 // Middleware
 // این خط به برنامه یاد می‌دهد که چطور داده‌های JSON را بخواند
