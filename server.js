@@ -23,9 +23,9 @@ process.on("uncaughtException", (err) => {
 // 2. Use path.join with __dirname to force the correct location
 // لود کردن فایل config.env که حاوی پسوردها و تنظیمات محرمانه است
 // استفاده از path.join باعث می‌شود آدرس‌دهی در ویندوز و لینوکس درست کار کند
-dotenv.config({
-  path: path.join(__dirname, "config.env"),
-});
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config({ path: path.join(__dirname, "config.env") });
+}
 
 // وارد کردن اپلیکیشن اکسپرس که در فایل app.js ساختیم
 const app = require("./app");
