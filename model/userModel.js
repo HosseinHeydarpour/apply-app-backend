@@ -122,13 +122,12 @@ userSchema.pre("save", async function () {
 });
 
 /**
- * REFACTORED: Removed 'next'.
+ * REFACTORED: Removed 'next' - made async to be consistent with other pre-save hook.
  */
-userSchema.pre("save", function (next) {
-  if (!this.isModified("password") || this.isNew) return next();
+userSchema.pre("save", async function () {
+  if (!this.isModified("password") || this.isNew) return;
 
   this.passwordChangedAt = Date.now() - 1000;
-  next();
 });
 
 userSchema.methods.correctPassword = async function (
