@@ -31,11 +31,7 @@ if (process.env.NODE_ENV !== "production") {
 const app = require("./app");
 
 // آماده‌سازی آدرس دیتابیس
-// جایگذاری پسورد واقعی به جای <PASSWORD> در آدرس اتصال
-const DB = process.env.DATABASE.replace(
-  "<PASSWORD>",
-  process.env.DATABASE_PASSWORD,
-);
+const DB = process.env.DATABASE;
 
 /**
  * اتصال به پایگاه داده MongoDB با استفاده از کتابخانه Mongoose
