@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema(
       },
     },
     passwordChangedAt: Date,
-    profileImage: { type: String, trim: true },
+    profileImage: { type: String, trim: true, default: "" },
     documents: [
       {
         title: String,
